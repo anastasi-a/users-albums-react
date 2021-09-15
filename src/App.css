@@ -1,0 +1,7 @@
+.MuiGrid-spacing-xs-3 {
+    margin: 80px -13px -13px -13px !important;
+}
+
+.MuiButtonBase-root.active span {
+    font-weight: bold;
+}
