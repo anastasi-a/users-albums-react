@@ -16,7 +16,7 @@ const Item = (props) => {
   const history = useHistory();
   const classes = useStyles();
 
-  function editUser(e) {
+  function removeUser(e) {
     e.stopPropagation();
     props.removeUser(props.item.id)
   }
@@ -32,7 +32,7 @@ const Item = (props) => {
       <TableCell>
         <IconButton
           aria-label="delete"
-          onClick={editUser}
+          onClick={removeUser}
         >
           <DeleteIcon />
         </IconButton>

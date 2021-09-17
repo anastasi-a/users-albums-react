@@ -41,7 +41,7 @@ const Photos = (props) => {
       <ImageList cols={3} rowHeight={185} className={classes.imageList}>
         <ImageListItem key="Subheader" cols={3} style={{ height: 'auto' }}>
           <ListSubheader component="div" className={classes.title}>
-            Album: {props.selectedAlbum.title}
+            Album: {props.selectedAlbum && props.selectedAlbum.title}
           </ListSubheader>
         </ImageListItem>
         {props.photos.map((item) => (

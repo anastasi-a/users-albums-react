@@ -38,8 +38,8 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-  fetchAlbums,
-  fetchUsers
+  fetchUsers,
+  fetchAlbums
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(AlbumsContainer);

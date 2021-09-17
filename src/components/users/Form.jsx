@@ -27,6 +27,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Form = (props) => {
   const [user, setUser] = useState({});
+  const [error, setError] = useState({});
+
   const classes = useStyles();
   const history = useHistory();
 
@@ -39,25 +41,82 @@ const Form = (props) => {
       ...user,
       [inputName]: value
     });
+    setError({});
+  }
+
+  function validateForm() {
+    let errors = {};
+    let isValid = true;
+
+    if (!user.name.trim()) {
+      isValid = false;
+      errors["name"] = "Name field cannot be empty";
+    } else {
+      if (!user.name.match(/^[a-zA-Z- ]+$/)) {
+        isValid = false;
+        errors["name"] = "Please enter only letters";
+      }
+    }
+
+    if (!user.username.trim()) {
+      isValid = false;
+      errors["username"] = "Username field cannot be empty";
+    }
+
+    if (!user.email.trim()) {
+      isValid = false;
+      errors["email"] = "Email field cannot be empty";
+    } else {
+      let lastAtPos = user.email.lastIndexOf('@');
+      let lastDotPos = user.email.lastIndexOf('.');
+
+      if (!(lastAtPos < lastDotPos && lastAtPos > 0 &&
+        user.email.indexOf('@@') === -1 &&
+        lastDotPos > 2 && (user.email.length - lastDotPos) > 2)) {
+        isValid = false;
+        errors["email"] = "Email is not valid";
+      }
+    }
+
+    if (!user.phone.trim()) {
+      isValid = false;
+      errors["phone"] = "Phone field cannot be empty";
+    }
+
+    const websitePattern = (/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=.]+$/);
+    if (!user.website.trim()) {
+      isValid = false;
+      errors["website"] = "Website field cannot be empty";
+    } else if (!user.website.match(websitePattern)) {
+      isValid = false;
+      errors["website"] = "Website is not valid";
+    }
+
+    setError(errors);
+    return isValid;
   }
 
   function saveUser() {
-    props.updateUser(user);
-    history.push("/users");
+    if (validateForm()) {
+      props.updateUser(user);
+      history.push("/users");
+    }
   }
 
   return (
     <form className={classes.root} noValidate autoComplete="off">
       <h4>EDIT USER</h4>
-      {
+      { user &&
         Object.keys(user).filter(key => key !== "id" &&
           typeof user[key] === "string").map(key =>
           <TextField
+            error={!!error[key]}
             key={key}
             value={user[key]}
             required
             id={key}
             label={key}
+            helperText={error[key]}
             variant="outlined"
             onChange={(e) => {changeInput(key, e.target.value)}}
           />
